@@ -36,42 +36,42 @@
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 1.84 ns |
-| FMTCompileMaster                                   | 12.0 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 11.7 ns |
-| FMTCompileSeparateFormatter                        | 11.5 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 2.61 ns |
-| ToChars                                            | 1.28 ns |
+| CustomCode                                         | 1.75 ns |
+| FMTCompileMaster                                   | 11.5 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 11.3 ns |
+| FMTCompileSeparateFormatter                        | 10.8 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 2.52 ns |
+| ToChars                                            | 1.25 ns |
 
 #### `value == 42`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 2.93 ns |
-| FMTCompileMaster                                   | 12.5 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 12.4 ns |
-| FMTCompileSeparateFormatter                        | 12.2 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 3.66 ns |
-| ToChars                                            | 2.57 ns |
+| CustomCode                                         | 2.79 ns |
+| FMTCompileMaster                                   | 12.0 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 12.0 ns |
+| FMTCompileSeparateFormatter                        | 11.5 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 3.53 ns |
+| ToChars                                            | 2.49 ns |
 
 #### `value == 273123`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 6.12 ns |
-| FMTCompileMaster                                   | 13.7 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 13.7 ns |
-| FMTCompileSeparateFormatter                        | 14.9 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 7.70 ns |
-| ToChars                                            | 3.85 ns |
+| CustomCode                                         | 6.15 ns |
+| FMTCompileMaster                                   | 13.3 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 13.2 ns |
+| FMTCompileSeparateFormatter                        | 14.2 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 7.49 ns |
+| ToChars                                            | 3.76 ns |
 
 #### `value == 9223372036854775807`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 7.12 ns |
-| FMTCompileMaster                                   | 15.1 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 14.9 ns |
-| FMTCompileSeparateFormatter                        | 17.5 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 10.9 ns |
-| ToChars                                            | 5.61 ns |
+| CustomCode                                         | 6.82 ns |
+| FMTCompileMaster                                   | 14.5 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 14.4 ns |
+| FMTCompileSeparateFormatter                        | 16.6 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 10.5 ns |
+| ToChars                                            | 5.45 ns |

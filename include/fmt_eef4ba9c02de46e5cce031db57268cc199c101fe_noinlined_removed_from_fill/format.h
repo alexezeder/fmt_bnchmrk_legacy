@@ -1597,8 +1597,7 @@ class bool_type_checker : private ErrorHandler {
 };
 
 template <typename OutputIt, typename Char>
-FMT_NOINLINE FMT_CONSTEXPR OutputIt fill(OutputIt it, size_t n,
-                                         const fill_t<Char>& fill) {
+FMT_CONSTEXPR OutputIt fill(OutputIt it, size_t n, const fill_t<Char>& fill) {
   auto fill_size = fill.size();
   if (fill_size == 1) return detail::fill_n(it, n, fill[0]);
   auto data = fill.data();
