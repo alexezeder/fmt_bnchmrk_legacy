@@ -75,3 +75,52 @@
 | FMTCompileSeparateFormatter                        | 16.6 ns |
 | FMTCompileSeparateFormatterNOINLINERemovedFromFill | 10.5 ns |
 | ToChars                                            | 5.45 ns |
+
+
+### Clang (main, 961e4384f4e938b901490912813ff0e8347cc3c0) C++20
+
+#### `value == 0`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 1.55 ns |
+| FMTCompileMaster                                   | 12.9 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 12.9 ns |
+| FMTCompileSeparateFormatter                        | 9.56 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 1.56 ns |
+| ToChars                                            | 1.89 ns |
+
+#### `value == 42`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 2.22 ns |
+| FMTCompileMaster                                   | 13.3 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 13.4 ns |
+| FMTCompileSeparateFormatter                        | 10.6 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 2.22 ns |
+| ToChars                                            | 2.21 ns |
+
+#### `value == 273123`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 5.03 ns |
+| FMTCompileMaster                                   | 14.7 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 14.8 ns |
+| FMTCompileSeparateFormatter                        | 13.4 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 5.19 ns |
+| ToChars                                            | 3.44 ns |
+
+#### `value == 9223372036854775807`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 6.47 ns |
+| FMTCompileMaster                                   | 16.0 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 16.0 ns |
+| FMTCompileSeparateFormatter                        | 15.4 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 6.49 ns |
+| ToChars                                            | 4.92 ns |
+
+

@@ -13,14 +13,7 @@
 
 #include "format.h"
 
-#ifndef FMT_USE_NONTYPE_TEMPLATE_PARAMETERS
-#  if defined(__cpp_nontype_template_parameter_class) && \
-      (!FMT_GCC_VERSION || FMT_GCC_VERSION >= 903)
-#    define FMT_USE_NONTYPE_TEMPLATE_PARAMETERS 1
-#  else
-#    define FMT_USE_NONTYPE_TEMPLATE_PARAMETERS 0
-#  endif
-#endif
+#define FMT_USE_NONTYPE_TEMPLATE_PARAMETERS 1
 
 FMT_BEGIN_NAMESPACE
 namespace detail {
@@ -696,8 +689,8 @@ constexpr auto parse_basic_format_specs() {
   detail::dynamic_format_specs<Char> specs;
   auto it = detail::parse_format_specs(ctx.begin(), ctx.end(),
                                        handler_type(specs, ctx));
-  return parse_basic_format_specs_result{specs,
-                                         detail::to_unsigned(it - Str.data)};
+  return parse_basic_format_specs_result<Char>{
+      specs, detail::to_unsigned(it - Str.data)};
 }
 
 template <typename T, typename Char, basic_format_specs<Char> specs>
@@ -751,7 +744,8 @@ constexpr auto parse() {
   if constexpr (result.specs.width_ref.kind == detail::arg_id_kind::none &&
                 result.specs.precision_ref.kind == detail::arg_id_kind::none) {
     constexpr basic_format_specs<Char> specs = result.specs;
-    return parse_result{int_formatter<T, Char, specs>{}, result.end};
+    return parse_result<int_formatter<T, Char, specs>>{
+        int_formatter<T, Char, specs>{}, result.end};
   }
 }
 
@@ -769,7 +763,8 @@ constexpr auto parse_specs(int next_arg_id) {
   constexpr auto Str = detail::fixed_string<Char, str.size() - POS>(
       str.begin() + POS, str.end());
   auto result = parse<T, Char, Str>();
-  return parse_specs_result{result.fmt, POS + result.end + 1, next_arg_id};
+  return parse_specs_result<decltype(result.fmt)>{
+      result.fmt, POS + result.end + 1, next_arg_id};
 }
 
 template <typename Char> struct arg_id_handler {
