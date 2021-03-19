@@ -7,28 +7,18 @@
 static void CustomCode(benchmark::State& state) {
   // check
   {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_custom_code(buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
+    std::string expected_result =
+        test_functions::test_stringstream(state.range(0));
+    std::string actual_result =
+        test_functions::test_custom_code(state.range(0));
     if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
+      fprintf(stderr, "1 expected: '%s', actual: '%s'\n", expected_result.data(),
               actual_result.data());
     }
   }
 
-  char buffer[max_buffer_size]{};
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_custom_code(buffer, state.range(0)));
+    benchmark::DoNotOptimize(test_functions::test_custom_code(state.range(0)));
   }
 }
 BENCHMARK(CustomCode)
@@ -40,29 +30,19 @@ BENCHMARK(CustomCode)
 static void FMTCompileMaster(benchmark::State& state) {
   // check
   {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end =
-          test_functions::test_fmt_compile_master(buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
+    std::string expected_result =
+        test_functions::test_stringstream(state.range(0));
+    std::string actual_result =
+        test_functions::test_fmt_compile_master(state.range(0));
     if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
+      fprintf(stderr, "2 expected: '%s', actual: '%s'\n", expected_result.data(),
               actual_result.data());
     }
   }
 
-  char buffer[max_buffer_size]{};
   for (auto _ : state) {
     benchmark::DoNotOptimize(
-        test_functions::test_fmt_compile_master(buffer, state.range(0)));
+        test_functions::test_fmt_compile_master(state.range(0)));
   }
 }
 BENCHMARK(FMTCompileMaster)
@@ -74,31 +54,21 @@ BENCHMARK(FMTCompileMaster)
 static void FMTCompileMasterNOINLINERemovedFromFill(benchmark::State& state) {
   // check
   {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end =
-          test_functions::test_fmt_compile_master_noinline_removed_from_fill(
-              buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
+    std::string expected_result =
+        test_functions::test_stringstream(state.range(0));
+    std::string actual_result =
+        test_functions::test_fmt_compile_master_noinline_removed_from_fill(
+            state.range(0));
     if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
+      fprintf(stderr, "3 expected: '%s', actual: '%s'\n", expected_result.data(),
               actual_result.data());
     }
   }
 
-  char buffer[max_buffer_size]{};
   for (auto _ : state) {
     benchmark::DoNotOptimize(
         test_functions::test_fmt_compile_master_noinline_removed_from_fill(
-            buffer, state.range(0)));
+            state.range(0)));
   }
 }
 BENCHMARK(FMTCompileMasterNOINLINERemovedFromFill)
@@ -110,30 +80,19 @@ BENCHMARK(FMTCompileMasterNOINLINERemovedFromFill)
 static void FMTCompileSeparateFormatter(benchmark::State& state) {
   // check
   {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_fmt_compile_separate_formatter(
-          buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
+    std::string expected_result =
+        test_functions::test_stringstream(state.range(0));
+    std::string actual_result =
+        test_functions::test_fmt_compile_separate_formatter(state.range(0));
     if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
+      fprintf(stderr, "4 expected: '%s', actual: '%s'\n", expected_result.data(),
               actual_result.data());
     }
   }
 
-  char buffer[max_buffer_size]{};
   for (auto _ : state) {
     benchmark::DoNotOptimize(
-        test_functions::test_fmt_compile_separate_formatter(buffer,
-                                                            state.range(0)));
+        test_functions::test_fmt_compile_separate_formatter(state.range(0)));
   }
 }
 BENCHMARK(FMTCompileSeparateFormatter)
@@ -146,32 +105,22 @@ static void FMTCompileSeparateFormatterNOINLINERemovedFromFill(
     benchmark::State& state) {
   // check
   {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::
-          test_fmt_compile_separate_formatter_noinline_removed_from_fill(
-              buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
+    std::string expected_result =
+        test_functions::test_stringstream(state.range(0));
+    std::string actual_result = test_functions::
+        test_fmt_compile_separate_formatter_noinline_removed_from_fill(
+            state.range(0));
     if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
+      fprintf(stderr, "5 expected: '%s', actual: '%s'\n", expected_result.data(),
               actual_result.data());
     }
   }
 
-  char buffer[max_buffer_size]{};
   for (auto _ : state) {
     benchmark::DoNotOptimize(
         test_functions::
             test_fmt_compile_separate_formatter_noinline_removed_from_fill(
-                buffer, state.range(0)));
+                state.range(0)));
   }
 }
 BENCHMARK(FMTCompileSeparateFormatterNOINLINERemovedFromFill)
@@ -180,14 +129,15 @@ BENCHMARK(FMTCompileSeparateFormatterNOINLINERemovedFromFill)
     ->Arg(273123)
     ->Arg(std::numeric_limits<int64_t>::max());
 
-static void ToChars(benchmark::State& state) {
-  char buffer[max_buffer_size]{};
+static void StringStream(benchmark::State& state) {
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_to_chars(buffer, state.range(0)));
+    benchmark::DoNotOptimize(test_functions::test_stringstream(state.range(0)));
   }
 }
-BENCHMARK(ToChars)->Arg(0)->Arg(42)->Arg(273123)->Arg(
-    std::numeric_limits<int64_t>::max());
+BENCHMARK(StringStream)
+    ->Arg(0)
+    ->Arg(42)
+    ->Arg(273123)
+    ->Arg(std::numeric_limits<int64_t>::max());
 
 BENCHMARK_MAIN();
