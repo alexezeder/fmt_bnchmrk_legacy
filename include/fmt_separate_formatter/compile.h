@@ -585,7 +585,7 @@ template <typename Char, typename T, int N> struct spec_field {
   formatter<T, Char> fmt;
 
   template <typename OutputIt, typename... Args>
-  constexpr OutputIt format(OutputIt out, const Args&... args) const {
+  FMT_ALWAYS_INLINE constexpr OutputIt format(OutputIt out, const Args&... args) const {
     // This ensures that the argument type is convertile to `const T&`.
     const T& arg = get<N>(args...);
     const auto& vargs =
@@ -625,7 +625,7 @@ template <typename L, typename R> struct concat {
   using char_type = typename L::char_type;
 
   template <typename OutputIt, typename... Args>
-  constexpr OutputIt format(OutputIt out, const Args&... args) const {
+  FMT_ALWAYS_INLINE constexpr OutputIt format(OutputIt out, const Args&... args) const {
     out = lhs.format(out, args...);
     return rhs.format(out, args...);
   }
@@ -922,7 +922,7 @@ FMT_DEPRECATED auto compile(const Args&... args)
 template <typename CompiledFormat, typename... Args,
           typename Char = typename CompiledFormat::char_type,
           FMT_ENABLE_IF(detail::is_compiled_format<CompiledFormat>::value)>
-FMT_INLINE std::basic_string<Char> format(const CompiledFormat& cf,
+FMT_ALWAYS_INLINE std::basic_string<Char> format(const CompiledFormat& cf,
                                           const Args&... args) {
   basic_memory_buffer<Char> buffer;
   cf.format(detail::buffer_appender<Char>(buffer), args...);
@@ -952,7 +952,7 @@ std::basic_string<Char> format(const CompiledFormat& cf, const Args&... args) {
 
 template <typename S, typename... Args,
           FMT_ENABLE_IF(detail::is_compiled_string<S>::value)>
-FMT_INLINE std::basic_string<typename S::char_type> format(const S&,
+FMT_ALWAYS_INLINE std::basic_string<typename S::char_type> format(const S&,
                                                            Args&&... args) {
 #ifdef __cpp_if_constexpr
   if constexpr (std::is_same<typename S::char_type, char>::value) {

@@ -379,11 +379,19 @@ template <typename T> using checked_ptr = T*;
 template <typename T> inline T* make_checked(T* p, size_t) { return p; }
 #endif
 
+#if FMT_GCC_VERSION || FMT_CLANG_VERSION
+#  define FMT_ALWAYS_INLINE inline __attribute__((always_inline))
+#elif FMT_MSC_VER
+#  define FMT_ALWAYS_INLINE __forceinline
+#else
+#  define FMT_ALWAYS_INLINE inline
+#endif
+
 template <typename Container, FMT_ENABLE_IF(is_contiguous<Container>::value)>
 #if FMT_CLANG_VERSION >= 307
 __attribute__((no_sanitize("undefined")))
 #endif
-inline checked_ptr<typename Container::value_type>
+FMT_ALWAYS_INLINE checked_ptr<typename Container::value_type>
 reserve(std::back_insert_iterator<Container> it, size_t n) {
   Container& c = get_container(it);
   size_t size = c.size();
@@ -464,16 +472,15 @@ class counting_iterator {
 
   value_type operator*() const { return {}; }
 };
-
 // <algorithm> is spectacularly slow to compile in C++20 so use a simple fill_n
 // instead (#1998).
 template <typename OutputIt, typename Size, typename T>
-FMT_CONSTEXPR OutputIt fill_n(OutputIt out, Size count, const T& value) {
+FMT_ALWAYS_INLINE FMT_CONSTEXPR OutputIt fill_n(OutputIt out, Size count, const T& value) {
   for (Size i = 0; i < count; ++i) *out++ = value;
   return out;
 }
 template <typename T, typename Size>
-FMT_CONSTEXPR20 T* fill_n(T* out, Size count, char value) {
+FMT_ALWAYS_INLINE FMT_CONSTEXPR20 T* fill_n(T* out, Size count, char value) {
   if (is_constant_evaluated()) {
     return fill_n<T*, Size, T>(out, count, value);
   }
@@ -489,14 +496,14 @@ using needs_conversion = bool_constant<
 
 template <typename OutChar, typename InputIt, typename OutputIt,
           FMT_ENABLE_IF(!needs_conversion<InputIt, OutChar>::value)>
-FMT_CONSTEXPR OutputIt copy_str(InputIt begin, InputIt end, OutputIt it) {
+FMT_ALWAYS_INLINE FMT_CONSTEXPR OutputIt copy_str(InputIt begin, InputIt end, OutputIt it) {
   while (begin != end) *it++ = *begin++;
   return it;
 }
 
 template <typename OutChar, typename InputIt,
           FMT_ENABLE_IF(!needs_conversion<InputIt, OutChar>::value)>
-FMT_CONSTEXPR20 OutChar* copy_str(InputIt begin, InputIt end, OutChar* out) {
+FMT_ALWAYS_INLINE FMT_CONSTEXPR20 OutChar* copy_str(InputIt begin, InputIt end, OutChar* out) {
   if (is_constant_evaluated()) {
     return copy_str<OutChar, InputIt, OutChar*>(begin, end, out);
   }
@@ -505,7 +512,7 @@ FMT_CONSTEXPR20 OutChar* copy_str(InputIt begin, InputIt end, OutChar* out) {
 
 template <typename OutChar, typename InputIt, typename OutputIt,
           FMT_ENABLE_IF(needs_conversion<InputIt, OutChar>::value)>
-OutputIt copy_str(InputIt begin, InputIt end, OutputIt it) {
+FMT_ALWAYS_INLINE OutputIt copy_str(InputIt begin, InputIt end, OutputIt it) {
   while (begin != end) *it++ = static_cast<char8_type>(*begin++);
   return it;
 }
@@ -1002,7 +1009,7 @@ FMT_EXTERN template struct basic_data<void>;
 // This is a struct rather than an alias to avoid shadowing warnings in gcc.
 struct data : basic_data<> {};
 
-template <typename T> FMT_CONSTEXPR int count_digits_fallback(T n) {
+template <typename T> FMT_CONSTEXPR FMT_ALWAYS_INLINE int count_digits_fallback(T n) {
   int count = 1;
   for (;;) {
     // Integer division is slow so do it for a group of four digits instead
@@ -1020,7 +1027,7 @@ template <typename T> FMT_CONSTEXPR int count_digits_fallback(T n) {
 #ifdef FMT_BUILTIN_CLZLL
 // Returns the number of decimal digits in n. Leading zeros are not counted
 // except for n == 0 in which case count_digits returns 1.
-FMT_CONSTEXPR20 inline int count_digits(uint64_t n) {
+FMT_CONSTEXPR20 FMT_ALWAYS_INLINE int count_digits(uint64_t n) {
   if (is_constant_evaluated()) {
     return count_digits_fallback(n);
   }
@@ -1030,13 +1037,13 @@ FMT_CONSTEXPR20 inline int count_digits(uint64_t n) {
 }
 #else
 // Fallback version of count_digits used when __builtin_clz is not available.
-FMT_CONSTEXPR inline int count_digits(uint64_t n) {
+FMT_CONSTEXPR FMT_ALWAYS_INLINE inline int count_digits(uint64_t n) {
   return count_digits_fallback(n);
 }
 #endif
 
 #if FMT_USE_INT128
-FMT_CONSTEXPR inline int count_digits(uint128_t n) {
+FMT_CONSTEXPR FMT_ALWAYS_INLINE int count_digits(uint128_t n) {
   int count = 1;
   for (;;) {
     // Integer division is slow so do it for a group of four digits instead
@@ -1053,7 +1060,7 @@ FMT_CONSTEXPR inline int count_digits(uint128_t n) {
 #endif
 
 // Counts the number of digits in n. BITS = log2(radix).
-template <unsigned BITS, typename UInt> FMT_CONSTEXPR int count_digits(UInt n) {
+template <unsigned BITS, typename UInt> FMT_ALWAYS_INLINE FMT_CONSTEXPR int count_digits(UInt n) {
   int num_digits = 0;
   do {
     ++num_digits;
@@ -1063,17 +1070,9 @@ template <unsigned BITS, typename UInt> FMT_CONSTEXPR int count_digits(UInt n) {
 
 template <> int count_digits<4>(detail::fallback_uintptr n);
 
-#if FMT_GCC_VERSION || FMT_CLANG_VERSION
-#  define FMT_ALWAYS_INLINE inline __attribute__((always_inline))
-#elif FMT_MSC_VER
-#  define FMT_ALWAYS_INLINE __forceinline
-#else
-#  define FMT_ALWAYS_INLINE inline
-#endif
-
 #ifdef FMT_BUILTIN_CLZ
 // Optional version of count_digits for better performance on 32-bit platforms.
-FMT_CONSTEXPR20 inline int count_digits(uint32_t n) {
+FMT_CONSTEXPR20 FMT_ALWAYS_INLINE int count_digits(uint32_t n) {
   if (is_constant_evaluated()) {
     return count_digits_fallback(n);
   }
@@ -1178,7 +1177,7 @@ inline format_decimal_result<Iterator> format_decimal(Iterator out, UInt value,
 }
 
 template <unsigned BASE_BITS, typename Char, typename UInt>
-FMT_CONSTEXPR Char* format_uint(Char* buffer, UInt value, int num_digits,
+FMT_ALWAYS_INLINE FMT_CONSTEXPR Char* format_uint(Char* buffer, UInt value, int num_digits,
                                 bool upper = false) {
   buffer += num_digits;
   Char* end = buffer;
@@ -1192,7 +1191,7 @@ FMT_CONSTEXPR Char* format_uint(Char* buffer, UInt value, int num_digits,
 }
 
 template <unsigned BASE_BITS, typename Char>
-Char* format_uint(Char* buffer, detail::fallback_uintptr n, int num_digits,
+FMT_ALWAYS_INLINE Char* format_uint(Char* buffer, detail::fallback_uintptr n, int num_digits,
                   bool = false) {
   auto char_digits = std::numeric_limits<unsigned char>::digits / 4;
   int start = (num_digits + char_digits - 1) / char_digits - 1;
@@ -1214,7 +1213,7 @@ Char* format_uint(Char* buffer, detail::fallback_uintptr n, int num_digits,
 }
 
 template <unsigned BASE_BITS, typename Char, typename It, typename UInt>
-inline It format_uint(It out, UInt value, int num_digits, bool upper = false) {
+FMT_ALWAYS_INLINE It format_uint(It out, UInt value, int num_digits, bool upper = false) {
   if (auto ptr = to_pointer<Char>(out, to_unsigned(num_digits))) {
     format_uint<BASE_BITS>(ptr, value, num_digits, upper);
     return out;
@@ -1602,7 +1601,7 @@ class bool_type_checker : private ErrorHandler {
 };
 
 template <typename OutputIt, typename Char>
-FMT_CONSTEXPR OutputIt fill(OutputIt it, size_t n,
+FMT_ALWAYS_INLINE FMT_CONSTEXPR OutputIt fill(OutputIt it, size_t n,
                                          const fill_t<Char>& fill) {
   auto fill_size = fill.size();
   if (fill_size == 1) return detail::fill_n(it, n, fill[0]);
@@ -1617,7 +1616,7 @@ FMT_CONSTEXPR OutputIt fill(OutputIt it, size_t n,
 // width: output display width in (terminal) column positions.
 template <align::type align = align::left, typename OutputIt, typename Char,
           typename F>
-FMT_CONSTEXPR OutputIt write_padded(OutputIt out,
+FMT_ALWAYS_INLINE FMT_CONSTEXPR OutputIt write_padded(OutputIt out,
                                     const basic_format_specs<Char>& specs,
                                     size_t size, size_t width, F&& f) {
   static_assert(align == align::left || align == align::right, "");
@@ -1636,7 +1635,7 @@ FMT_CONSTEXPR OutputIt write_padded(OutputIt out,
 
 template <align::type align = align::left, typename OutputIt, typename Char,
           typename F>
-constexpr OutputIt write_padded(OutputIt out,
+FMT_ALWAYS_INLINE constexpr OutputIt write_padded(OutputIt out,
                                 const basic_format_specs<Char>& specs,
                                 size_t size, F&& f) {
   return write_padded<align>(out, specs, size, size, f);
@@ -1688,7 +1687,7 @@ template <typename Char> struct write_int_data {
 //   <left-padding><prefix><numeric-padding><digits><right-padding>
 // where <digits> are written by f(it).
 template <typename OutputIt, typename Char, typename F>
-FMT_CONSTEXPR OutputIt write_int(OutputIt out, int num_digits,
+FMT_ALWAYS_INLINE FMT_CONSTEXPR OutputIt write_int(OutputIt out, int num_digits,
                                  string_view prefix,
                                  const basic_format_specs<Char>& specs, F f) {
   auto data = write_int_data<Char>(num_digits, prefix, specs);
@@ -2387,7 +2386,7 @@ class arg_formatter_base {
   }
 
   template <typename T, FMT_ENABLE_IF(is_integral<T>::value)>
-  FMT_CONSTEXPR FMT_INLINE iterator operator()(T value) {
+  FMT_CONSTEXPR FMT_ALWAYS_INLINE iterator operator()(T value) {
     if (specs_)
       write_int(value, *specs_);
     else
@@ -2462,7 +2461,7 @@ class arg_formatter : public arg_formatter_base<OutputIt, Char> {
     *specs* contains format specifier information for standard argument types.
     \endrst
    */
-  constexpr explicit arg_formatter(context_type& ctx,
+  FMT_ALWAYS_INLINE constexpr explicit arg_formatter(context_type& ctx,
                                    format_specs* specs = nullptr)
       : base(ctx.out(), specs, ctx.locale()), ctx_(ctx) {}
 
@@ -3369,7 +3368,7 @@ void check_format_string(S format_str) {
 }
 
 template <template <typename> class Handler, typename Context>
-FMT_CONSTEXPR void handle_dynamic_spec(int& value,
+FMT_ALWAYS_INLINE FMT_CONSTEXPR void handle_dynamic_spec(int& value,
                                        arg_ref<typename Context::char_type> ref,
                                        Context& ctx) {
   switch (ref.kind) {
@@ -3606,7 +3605,7 @@ struct formatter<T, Char,
   }
 
   template <typename FormatContext>
-  FMT_CONSTEXPR auto format(const T& val, FormatContext& ctx) const
+  FMT_ALWAYS_INLINE FMT_CONSTEXPR auto format(const T& val, FormatContext& ctx) const
       -> decltype(ctx.out()) {
     auto specs = specs_;
     detail::handle_dynamic_spec<detail::width_checker>(specs.width,

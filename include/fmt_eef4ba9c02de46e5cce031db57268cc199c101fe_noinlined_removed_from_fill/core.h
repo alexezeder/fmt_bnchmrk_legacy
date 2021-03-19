@@ -1320,6 +1320,14 @@ template <typename Context> class basic_format_arg {
   bool is_arithmetic() const { return detail::is_arithmetic_type(type_); }
 };
 
+#if FMT_GCC_VERSION || FMT_CLANG_VERSION
+#  define FMT_ALWAYS_INLINE inline __attribute__((always_inline))
+#elif FMT_MSC_VER
+        #  define FMT_ALWAYS_INLINE __forceinline
+#else
+#  define FMT_ALWAYS_INLINE inline
+#endif
+
 /**
   \rst
   Visits an argument dispatching to the appropriate visit method based on
@@ -1328,7 +1336,7 @@ template <typename Context> class basic_format_arg {
   \endrst
  */
 template <typename Visitor, typename Context>
-FMT_CONSTEXPR_DECL FMT_INLINE auto visit_format_arg(
+FMT_ALWAYS_INLINE FMT_CONSTEXPR_DECL auto visit_format_arg(
     Visitor&& vis, const basic_format_arg<Context>& arg) -> decltype(vis(0)) {
   using char_type = typename Context::char_type;
   switch (arg.type_) {
