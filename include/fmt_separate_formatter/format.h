@@ -3609,10 +3609,10 @@ struct formatter<T, Char,
   FMT_CONSTEXPR auto format(const T& val, FormatContext& ctx) const
       -> decltype(ctx.out()) {
     auto specs = specs_;
-    detail::handle_dynamic_spec<detail::width_checker>(specs.width,
-                                                       specs.width_ref, ctx);
-    detail::handle_dynamic_spec<detail::precision_checker>(
-        specs.precision, specs.precision_ref, ctx);
+//    detail::handle_dynamic_spec<detail::width_checker>(specs.width,
+//                                                       specs.width_ref, ctx);
+//    detail::handle_dynamic_spec<detail::precision_checker>(
+//        specs.precision, specs.precision_ref, ctx);
     using af = detail::arg_formatter<typename FormatContext::iterator,
                                      typename FormatContext::char_type>;
     return visit_format_arg(af(ctx, &specs),
