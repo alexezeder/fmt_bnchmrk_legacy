@@ -3,6 +3,6 @@
 
 namespace test_functions {
 char* test_fmt_compile_master(char* buffer, unsigned value) {
-  return fmt::format_to(buffer, FMT_COMPILE("{:x}"), value);
+  return fmt::format_to(buffer, FMT_COMPILE("{:0>8x}"), value);
 }
 }  // namespace test_functions

@@ -23,6 +23,9 @@ constexpr char* format_uint(char* buffer, unsigned value, int num_digits) {
 
 char* test_custom_code(char* buffer, unsigned value) {
   int num_digits = count_digits(value);
+  for (int i = 0; i < 8 - num_digits; ++i) {
+    *buffer++ = '0';
+  }
   return format_uint(buffer, value, num_digits);
 }
 }  // namespace test_functions

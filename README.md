@@ -26,7 +26,6 @@
 * FMTCompileSeparateFormatterNOINLINERemovedFromFill - same as previous with
   FMT_NOINLINE removed from the same `fill` function as in
   FMTCompileMasterNOINLINERemovedFromFill
-* ToChars - `to_chars` from C++17 `<charconv>` header used
 
 ## here are results on my PC:
 
@@ -36,45 +35,41 @@
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 1.75 ns |
-| FMTCompileMaster                                   | 11.5 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 11.3 ns |
-| FMTCompileSeparateFormatter                        | 10.8 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 2.52 ns |
-| ToChars                                            | 1.25 ns |
+| CustomCode                                         | 4.48 ns |
+| FMTCompileMaster                                   | 27.8 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 27.7 ns |
+| FMTCompileSeparateFormatter                        | 11.0 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 5.97 ns |
 
 #### `value == 42`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 2.79 ns |
-| FMTCompileMaster                                   | 12.0 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 12.0 ns |
-| FMTCompileSeparateFormatter                        | 11.5 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 3.53 ns |
-| ToChars                                            | 2.49 ns |
+| CustomCode                                         | 5.61 ns |
+| FMTCompileMaster                                   | 28.8 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 28.6 ns |
+| FMTCompileSeparateFormatter                        | 11.8 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 6.21 ns |
 
 #### `value == 273123`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 6.15 ns |
-| FMTCompileMaster                                   | 13.3 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 13.2 ns |
-| FMTCompileSeparateFormatter                        | 14.2 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 7.49 ns |
-| ToChars                                            | 3.76 ns |
+| CustomCode                                         | 8.07 ns |
+| FMTCompileMaster                                   | 29.7 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 29.9 ns |
+| FMTCompileSeparateFormatter                        | 15.1 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 8.06 ns |
 
 #### `value == 9223372036854775807`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 6.82 ns |
-| FMTCompileMaster                                   | 14.5 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 14.4 ns |
-| FMTCompileSeparateFormatter                        | 16.6 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 10.5 ns |
-| ToChars                                            | 5.45 ns |
+| CustomCode                                         | 9.28 ns |
+| FMTCompileMaster                                   | 27.2 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 27.5 ns |
+| FMTCompileSeparateFormatter                        | 16.7 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 9.33 ns |
 
 
 ### Clang (main, 961e4384f4e938b901490912813ff0e8347cc3c0) C++20
@@ -83,44 +78,40 @@
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 1.55 ns |
-| FMTCompileMaster                                   | 12.9 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 12.9 ns |
-| FMTCompileSeparateFormatter                        | 9.56 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 1.56 ns |
-| ToChars                                            | 1.89 ns |
+| CustomCode                                         | 5.23 ns |
+| FMTCompileMaster                                   | 19.2 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 19.2 ns |
+| FMTCompileSeparateFormatter                        | 9.97 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 5.48 ns |
 
 #### `value == 42`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 2.22 ns |
-| FMTCompileMaster                                   | 13.3 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 13.4 ns |
-| FMTCompileSeparateFormatter                        | 10.6 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 2.22 ns |
-| ToChars                                            | 2.21 ns |
+| CustomCode                                         | 6.08 ns |
+| FMTCompileMaster                                   | 19.6 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 19.6 ns |
+| FMTCompileSeparateFormatter                        | 10.7 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 5.99 ns |
 
 #### `value == 273123`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 5.03 ns |
-| FMTCompileMaster                                   | 14.7 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 14.8 ns |
-| FMTCompileSeparateFormatter                        | 13.4 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 5.19 ns |
-| ToChars                                            | 3.44 ns |
+| CustomCode                                         | 8.44 ns |
+| FMTCompileMaster                                   | 20.9 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 21.0 ns |
+| FMTCompileSeparateFormatter                        | 13.5 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 8.30 ns |
 
 #### `value == 9223372036854775807`
 
 | Benchmark                                          |    Time |
 | ---------------------------------------------------|---------|
-| CustomCode                                         | 6.47 ns |
-| FMTCompileMaster                                   | 16.0 ns |
-| FMTCompileMasterNOINLINERemovedFromFill            | 16.0 ns |
-| FMTCompileSeparateFormatter                        | 15.4 ns |
-| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 6.49 ns |
-| ToChars                                            | 4.92 ns |
+| CustomCode                                         | 8.28 ns |
+| FMTCompileMaster                                   | 19.3 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 19.0 ns |
+| FMTCompileSeparateFormatter                        | 15.7 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 10.6 ns |
 
 
