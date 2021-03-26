@@ -115,3 +115,44 @@
 | FMTCompileSeparateFormatterNOINLINERemovedFromFill | 6.17 ns |
 
 
+### MSVC 19.28.29913 C++20
+
+#### `value == 0`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 6.33 ns |
+| FMTCompileMaster                                   | 45.5 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 45.5 ns |
+| FMTCompileSeparateFormatter                        | 16.6 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 16.6 ns |
+
+#### `value == 42`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 6.85 ns |
+| FMTCompileMaster                                   | 45.8 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 45.9 ns |
+| FMTCompileSeparateFormatter                        | 16.7 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 16.7 ns |
+
+#### `value == 273123`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 10.9 ns |
+| FMTCompileMaster                                   | 47.2 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 47.1 ns |
+| FMTCompileSeparateFormatter                        | 18.4 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 18.4 ns |
+
+#### `value == 9223372036854775807`
+
+| Benchmark                                          |    Time |
+| ---------------------------------------------------|---------|
+| CustomCode                                         | 11.3 ns |
+| FMTCompileMaster                                   | 44.7 ns |
+| FMTCompileMasterNOINLINERemovedFromFill            | 44.7 ns |
+| FMTCompileSeparateFormatter                        | 14.7 ns |
+| FMTCompileSeparateFormatterNOINLINERemovedFromFill | 14.7 ns |
