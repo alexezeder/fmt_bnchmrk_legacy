@@ -4,20 +4,20 @@
 
 namespace test_functions {
 char* test_fmt_non_named(char* buffer, unsigned value) {
-  return fmt::format_to(buffer, "{}", value);
+  return fmt::format_to(buffer, "{:^5}", value);
 }
 char* test_fmt_runtime_named(char* buffer, unsigned value) {
-  return fmt::format_to(buffer, "{arg}", fmt::arg("arg", value));
+  return fmt::format_to(buffer, "{arg:^5}", fmt::arg("arg", value));
 }
 char* test_fmt_compile_non_named(char* buffer, unsigned value) {
-  return fmt::format_to(buffer, FMT_COMPILE("{}"), value);
+  return fmt::format_to(buffer, FMT_COMPILE("{:^5}"), value);
 }
 char* test_fmt_compile_runtime_named(char* buffer, unsigned value) {
-  return fmt::format_to(buffer, FMT_COMPILE("{arg}"), fmt::arg("arg", value));
+  return fmt::format_to(buffer, FMT_COMPILE("{arg:^5}"), fmt::arg("arg", value));
 }
 char* test_fmt_compile_compile_time_named(char* buffer, unsigned value) {
   using namespace fmt::literals;
-  return fmt::format_to(buffer, FMT_COMPILE("{arg}"), "arg"_a = value);
+  return fmt::format_to(buffer, FMT_COMPILE("{arg:^5}"), "arg"_a = value);
 }
 
 }  // namespace test_functions
