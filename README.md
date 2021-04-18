@@ -124,3 +124,19 @@
 | ToChars                                            | 4.92 ns |
 
 
+| Benchmark                         |    Time     |       CPU | Iterations |
+| ----------------------------------|-------------|-----------|------------|
+| FMTNonNamed/42                    | 14.3 ns     |   14.3 ns |   47750054 |
+| FMTRuntimeNamed/42                | 28.0 ns     |   28.0 ns |   25015214 |
+| FMTCompileNonNamed/42             | 2.28 ns     |   2.28 ns |  307524148 |
+| FMTCompileRuntimeNamed/42         | 3.05 ns     |   3.05 ns |  229333563 |
+| FMTCompileCompileTimeNamed/42     | 2.23 ns     |   2.23 ns |  316913616 |
+
+
+| Benchmark                         |    Time     |       CPU | Iterations |
+| ----------------------------------|-------------|-----------|------------|
+| FMTNonNamed/42                    | 46.0 ns     |   46.0 ns |   15185138 |
+| FMTRuntimeNamed/42                | 54.5 ns     |   54.5 ns |   12507523 |
+| FMTCompileNonNamed/42             | 30.2 ns     |   30.2 ns |   23434189 |
+| FMTCompileRuntimeNamed/42         | 54.3 ns     |   54.3 ns |   12678573 |
+| FMTCompileCompileTimeNamed/42     | 29.8 ns     |   29.8 ns |   23493430 |
