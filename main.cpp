@@ -2,192 +2,54 @@
 
 #include <cstdio>
 
-#include "test_functions.hpp"
+#include "fmt/compile.h"
 
-static void CustomCode(benchmark::State& state) {
-  // check
-  {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_custom_code(buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
-    if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
-              actual_result.data());
-    }
-  }
-
-  char buffer[max_buffer_size]{};
+static void JustWrite42(benchmark::State& state) {
+  auto fp = std::fopen( "/tmp/file_jw.txt", "w" );
+  std::fputc('a', fp);
+  auto buffer = "42";
+  auto buffer_size = std::strlen(buffer);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_custom_code(buffer, state.range(0)));
+    benchmark::DoNotOptimize(std::fwrite(buffer, 1, buffer_size, fp));
   }
 }
-BENCHMARK(CustomCode)
-    ->Arg(0)
-    ->Arg(42)
-    ->Arg(273123)
-    ->Arg(std::numeric_limits<int64_t>::max());
+BENCHMARK(JustWrite42);
 
-static void FMTCompileMaster(benchmark::State& state) {
-  // check
-  {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end =
-          test_functions::test_fmt_compile_master(buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
-    if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
-              actual_result.data());
-    }
-  }
-
-  char buffer[max_buffer_size]{};
+static void PrintTrivial(benchmark::State& state) {
+  auto fp = std::fopen( "/tmp/file_pt.txt", "w" );
+  std::fputc('a', fp);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_fmt_compile_master(buffer, state.range(0)));
+    fmt::print(fp, "{}", 42);
   }
 }
-BENCHMARK(FMTCompileMaster)
-    ->Arg(0)
-    ->Arg(42)
-    ->Arg(273123)
-    ->Arg(std::numeric_limits<int64_t>::max());
+BENCHMARK(PrintTrivial);
 
-static void FMTCompileMasterNOINLINERemovedFromFill(benchmark::State& state) {
-  // check
-  {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end =
-          test_functions::test_fmt_compile_master_noinline_removed_from_fill(
-              buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
-    if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
-              actual_result.data());
-    }
-  }
-
-  char buffer[max_buffer_size]{};
+static void PrintTrivialCompile(benchmark::State& state) {
+  auto fp = std::fopen( "/tmp/file_ptc.txt", "w" );
+  std::fputc('a', fp);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_fmt_compile_master_noinline_removed_from_fill(
-            buffer, state.range(0)));
+    fmt::print(fp, FMT_COMPILE("{}"), 42);
   }
 }
-BENCHMARK(FMTCompileMasterNOINLINERemovedFromFill)
-    ->Arg(0)
-    ->Arg(42)
-    ->Arg(273123)
-    ->Arg(std::numeric_limits<int64_t>::max());
+BENCHMARK(PrintTrivialCompile);
 
-static void FMTCompileSeparateFormatter(benchmark::State& state) {
-  // check
-  {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_fmt_compile_separate_formatter(
-          buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
-    if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
-              actual_result.data());
-    }
-  }
-
-  char buffer[max_buffer_size]{};
+static void PrintComplex(benchmark::State& state) {
+  auto fp = std::fopen( "/tmp/file_pc.txt", "w" );
+  std::fputc('a', fp);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_fmt_compile_separate_formatter(buffer,
-                                                            state.range(0)));
+    fmt::print(fp, "{:08x} {:0.2f} {:>7}", 42, 2.8, "text");
   }
 }
-BENCHMARK(FMTCompileSeparateFormatter)
-    ->Arg(0)
-    ->Arg(42)
-    ->Arg(273123)
-    ->Arg(std::numeric_limits<int64_t>::max());
+BENCHMARK(PrintComplex);
 
-static void FMTCompileSeparateFormatterNOINLINERemovedFromFill(
-    benchmark::State& state) {
-  // check
-  {
-    std::string expected_result;
-    std::string actual_result;
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::test_to_chars(buffer, state.range(0));
-      expected_result = std::string_view(buffer, end);
-    }
-    {
-      char buffer[max_buffer_size]{};
-      auto end = test_functions::
-          test_fmt_compile_separate_formatter_noinline_removed_from_fill(
-              buffer, state.range(0));
-      actual_result = std::string_view(buffer, end);
-    }
-    if (expected_result != actual_result) {
-      fprintf(stderr, "expected: '%s', actual: '%s'", expected_result.data(),
-              actual_result.data());
-    }
-  }
-
-  char buffer[max_buffer_size]{};
+static void PrintComplexCompile(benchmark::State& state) {
+  auto fp = std::fopen( "/tmp/file_pcc.txt", "w" );
+  std::fputc('a', fp);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::
-            test_fmt_compile_separate_formatter_noinline_removed_from_fill(
-                buffer, state.range(0)));
+    fmt::print(fp, FMT_COMPILE("{:08x} {:0.2f} {:>7}"), 42, 2.8, "text");
   }
 }
-BENCHMARK(FMTCompileSeparateFormatterNOINLINERemovedFromFill)
-    ->Arg(0)
-    ->Arg(42)
-    ->Arg(273123)
-    ->Arg(std::numeric_limits<int64_t>::max());
+BENCHMARK(PrintComplexCompile);
 
-static void ToChars(benchmark::State& state) {
-  char buffer[max_buffer_size]{};
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(
-        test_functions::test_to_chars(buffer, state.range(0)));
-  }
-}
-BENCHMARK(ToChars)->Arg(0)->Arg(42)->Arg(273123)->Arg(
-    std::numeric_limits<int64_t>::max());
 
 BENCHMARK_MAIN();
